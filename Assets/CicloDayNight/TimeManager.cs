@@ -26,7 +26,7 @@ public class TimeManager : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        Time.timeScale = 4f;
+        Time.timeScale = 2f;
     }
 
     // Update is called once per frame
