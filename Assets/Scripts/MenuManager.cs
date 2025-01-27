@@ -8,12 +8,14 @@ public class MenuManager : MonoBehaviour
     public GameObject canvasMainMenu;
     public GameObject canvasAjustes;
     public GameObject canvasCreditos;
+    public GameObject canvasPlay;
 
     public void MainMenu()
     {
         canvasMainMenu.SetActive(true);
         canvasAjustes.SetActive(false);
         canvasCreditos.SetActive(false);
+        canvasPlay.SetActive(false);
     }
 
     public void AjustesPlaceholder()
@@ -21,6 +23,7 @@ public class MenuManager : MonoBehaviour
         canvasAjustes.SetActive(true);
         canvasCreditos.SetActive(false);
         canvasMainMenu.SetActive(false);
+        canvasPlay.SetActive(false);
     }
 
     public void creditosPlaceholder()
@@ -28,6 +31,14 @@ public class MenuManager : MonoBehaviour
         canvasCreditos.SetActive(true);
         canvasAjustes.SetActive(false);
         canvasMainMenu.SetActive(false);
+        canvasPlay.SetActive(false);
+    }
+    public void playPlaceholder()
+    {
+        canvasCreditos.SetActive(false);
+        canvasAjustes.SetActive(false);
+        canvasMainMenu.SetActive(false);
+        canvasPlay.SetActive(true);
     }
 
     public void ExitGame()
@@ -40,4 +51,8 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("Level1");
     }
 
+    public void DayNightGame()
+    {
+        SceneManager.LoadScene("DayNightCycle");
+    }
 }
