@@ -16,7 +16,7 @@ public class TimeManager : MonoBehaviour
     [SerializeField]private Gradient SunriseToDay;
     [SerializeField]private Gradient DayToSunset;
     [SerializeField]private Gradient SunsetToNight;
-    private int minutos;
+    [SerializeField] public int minutos;
     public int Min { get { return minutos; }set { minutos = value;OnMinuteChange(value); } }
     private int horas;
     public int H { get { return horas; } set { horas = value; OnHourChange(value); } }
@@ -35,13 +35,14 @@ public class TimeManager : MonoBehaviour
         tempSeconds += Time.deltaTime;
         if (tempSeconds >= 1)
         {
-            minutos += 1;
+            Min += 1;
             tempSeconds = 0;
         }
     }
     private void OnMinuteChange(int value)
     {
         globalLight.transform.Rotate(Vector3.up, (1f / (1440f / 4f)) * 360f, Space.World);
+        globalLight.transform.Rotate(Vector3.right, (1f / (1440f / 4f)) * 360f, Space.World);
         if (value >= 60) 
         {
             horas++;
