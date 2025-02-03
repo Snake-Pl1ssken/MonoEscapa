@@ -19,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] float verticalVelocity;
 
-    CharacterController characterController;
+    Rigidbody rigidoCuerpo;
     //CONTROL PLAYERCAM
 
     //CONTROL PLAYERCAM
@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
-        characterController = GetComponent<CharacterController>();    
+        rigidoCuerpo = GetComponent<Rigidbody>();    
     }
     private void OnEnable()
     {
@@ -87,30 +87,30 @@ public class PlayerMovement : MonoBehaviour
 
 
         //Movement !onGround Player (Salto)
-        if (characterController.isGrounded)
-        {
-            if (Salto.action.WasPressedThisFrame())
-            {
-                verticalVelocity = jumpForce;
-            }
-            else
-            { 
-                verticalVelocity = 0;
-            }
-        }
-        else
-        {
-            verticalVelocity += gravity * Time.deltaTime;
-        }
+        //if (rigidoCuerpo.isGrounded)
+        //{
+        //    if (Salto.action.WasPressedThisFrame())
+        //    {
+        //        verticalVelocity = jumpForce;
+        //    }
+        //    else
+        //    { 
+        //        verticalVelocity = 0;
+        //    }
+        //}
+        //else
+        //{
+        //    verticalVelocity += gravity * Time.deltaTime;
+        //}
         //Movement !onGround Player (Salto)
 
 
         Vector3 finalMovement = (movementInput.normalized * speed) + Vector3.up * verticalVelocity;   
-        Move(finalMovement);
+       // Move(finalMovement);
     }
 
-    void Move(Vector3 direction)
-    { 
-        characterController.Move(direction * Time.deltaTime);
-    }
+    //void Move(Vector3 direction)
+    //{
+    //    rigidoCuerpo.Move(direction * Time.deltaTime);
+    //}
 }
