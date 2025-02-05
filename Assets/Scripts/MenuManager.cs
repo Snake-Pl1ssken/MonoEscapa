@@ -1,51 +1,56 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
-    public GameObject canvasMainMenu;
-    public GameObject canvasAjustes;
-    public GameObject canvasCreditos;
-    public GameObject canvasPlay;
+    public CanvasGroup canvasMainMenu;
+    public CanvasGroup canvasAjustes;
+    public CanvasGroup canvasCreditos;
+    public CanvasGroup canvasPlay;
+
+    private void Start()
+    {
+        MainMenu(); 
+    }
 
     public void MainMenu()
     {
-        canvasMainMenu.SetActive(true);
-        canvasAjustes.SetActive(false);
-        canvasCreditos.SetActive(false);
-        canvasPlay.SetActive(false);
+        EnableCanvasGroup(canvasMainMenu);
     }
 
     public void AjustesPlaceholder()
-    { 
-        canvasAjustes.SetActive(true);
-        canvasCreditos.SetActive(false);
-        canvasMainMenu.SetActive(false);
-        canvasPlay.SetActive(false);
+    {
+        EnableCanvasGroup(canvasAjustes);
     }
 
-    public void creditosPlaceholder()
+    public void CreditosPlaceholder()
     {
-        canvasCreditos.SetActive(true);
-        canvasAjustes.SetActive(false);
-        canvasMainMenu.SetActive(false);
-        canvasPlay.SetActive(false);
+        EnableCanvasGroup(canvasCreditos);
     }
-    public void playPlaceholder()
+
+    public void PlayPlaceholder()
     {
-        canvasCreditos.SetActive(false);
-        canvasAjustes.SetActive(false);
-        canvasMainMenu.SetActive(false);
-        canvasPlay.SetActive(true);
+        EnableCanvasGroup(canvasPlay);
+    }
+
+    private void EnableCanvasGroup(CanvasGroup activeCanvas)
+    {
+        CanvasGroup[] canvasGroups = { canvasMainMenu, canvasAjustes, canvasCreditos, canvasPlay };
+
+        foreach (var canvas in canvasGroups)
+        {
+            bool isActive = (canvas == activeCanvas);
+            canvas.alpha = isActive ? 1 : 0;
+            canvas.interactable = isActive;
+            canvas.blocksRaycasts = isActive;
+        }
     }
 
     public void ExitGame()
-    { 
+    {
         Application.Quit();
     }
-    
+
     public void StartGame()
     {
         SceneManager.LoadScene("Level1");
