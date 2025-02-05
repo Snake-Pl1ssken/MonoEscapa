@@ -5,6 +5,7 @@ using TMPro;
 
 public class PlayerMovementTutorial : MonoBehaviour
 {
+    PlayerCam playercam;
     [Header("Movement")]
     public float moveSpeed;
 
@@ -37,8 +38,8 @@ public class PlayerMovementTutorial : MonoBehaviour
     private void Start()
     {
         rigidoCuerpo = GetComponent<Rigidbody>();
-        rigidoCuerpo.freezeRotation = true;
-
+        //rigidoCuerpo.freezeRotation = true;
+        ResetJump();
         readyToJump = true;
     }
 
@@ -55,6 +56,8 @@ public class PlayerMovementTutorial : MonoBehaviour
             rigidoCuerpo.drag = groundDrag;
         else
             rigidoCuerpo.drag = 0;
+        //rigidoCuerpo.transform.rotation = Quaternion.Euler(playercam.xRotation, playercam.yRotation, 0);
+        rigidoCuerpo.rotation = Quaternion.Euler(0, playercam.yRotation, 0);
     }
 
     private void FixedUpdate()
@@ -102,6 +105,7 @@ public class PlayerMovementTutorial : MonoBehaviour
             Vector3 limitedVel = flatVel.normalized * moveSpeed;
             rigidoCuerpo.velocity = new Vector3(limitedVel.x, rigidoCuerpo.velocity.y, limitedVel.z);
         }
+
     }
 
     private void Jump()
