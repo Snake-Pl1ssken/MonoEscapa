@@ -1902,6 +1902,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f638d21dff16f584c9d9732d813931b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Salto: {fileID: 896702694185784446, guid: 5e0a376f1dcd0e8468cd38352e6f6628, type: 3}
+  Caminar: {fileID: -2841853033959142740, guid: 5e0a376f1dcd0e8468cd38352e6f6628,
+    type: 3}
+  Correr: {fileID: 722843647101487731, guid: 5e0a376f1dcd0e8468cd38352e6f6628, type: 3}
+  Derecha: {fileID: 1008159614670660998, guid: 5e0a376f1dcd0e8468cd38352e6f6628, type: 3}
+  Izquierda: {fileID: -1434716346053614585, guid: 5e0a376f1dcd0e8468cd38352e6f6628,
+    type: 3}
+  Atras: {fileID: -4934288769262613737, guid: 5e0a376f1dcd0e8468cd38352e6f6628, type: 3}
+  GamePad: {fileID: 7529766090214495032, guid: 5e0a376f1dcd0e8468cd38352e6f6628, type: 3}
   speed: 10
   jumpForce: 5
   gravity: -9.8

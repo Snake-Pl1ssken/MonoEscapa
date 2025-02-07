@@ -19,7 +19,9 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] float verticalVelocity;
 
-    Rigidbody rigidoCuerpo;
+    Rigidbody rigidoCuerpo; //No se esta usando
+
+    CharacterController characterController;    
     //CONTROL PLAYERCAM
 
     //CONTROL PLAYERCAM
@@ -28,7 +30,8 @@ public class PlayerMovement : MonoBehaviour
     {
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
-        rigidoCuerpo = GetComponent<Rigidbody>();    
+        rigidoCuerpo = GetComponent<Rigidbody>();
+        characterController = GetComponent<CharacterController>();
     }
     private void OnEnable()
     {
@@ -87,30 +90,30 @@ public class PlayerMovement : MonoBehaviour
 
 
         //Movement !onGround Player (Salto)
-        //if (rigidoCuerpo.isGrounded)
-        //{
-        //    if (Salto.action.WasPressedThisFrame())
-        //    {
-        //        verticalVelocity = jumpForce;
-        //    }
-        //    else
-        //    { 
-        //        verticalVelocity = 0;
-        //    }
-        //}
-        //else
-        //{
-        //    verticalVelocity += gravity * Time.deltaTime;
-        //}
+        if (characterController.isGrounded)
+        {
+            if (Salto.action.WasPressedThisFrame())
+            {
+                verticalVelocity = jumpForce;
+            }
+            else
+            {
+                verticalVelocity = 0;
+            }
+        }
+        else
+        {
+            verticalVelocity += gravity * Time.deltaTime;
+        }
         //Movement !onGround Player (Salto)
 
 
         Vector3 finalMovement = (movementInput.normalized * speed) + Vector3.up * verticalVelocity;   
-       // Move(finalMovement);
+        Move(finalMovement);
     }
 
-    //void Move(Vector3 direction)
-    //{
-    //    rigidoCuerpo.Move(direction * Time.deltaTime);
-    //}
+    void Move(Vector3 direction)
+    {
+        characterController.Move(direction * Time.deltaTime);
+    }
 }

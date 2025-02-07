@@ -57,7 +57,7 @@ public class PlayerMovementTutorial : MonoBehaviour
         else
             rigidoCuerpo.drag = 0;
         //rigidoCuerpo.transform.rotation = Quaternion.Euler(playercam.xRotation, playercam.yRotation, 0);
-        rigidoCuerpo.rotation = Quaternion.Euler(0, playercam.yRotation, 0);
+        //rigidoCuerpo.rotation = Quaternion.Euler(0, playercam.yRotation, 0);
     }
 
     private void FixedUpdate()
