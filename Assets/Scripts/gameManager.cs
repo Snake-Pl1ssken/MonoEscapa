@@ -8,7 +8,15 @@ public class MenuPausa : MonoBehaviour
 
     [Header("Input Actions Pause")]
     [SerializeField] private InputActionReference pause;
+    [Space(20)]
+    [Header("CanvasGruop Pause")]
     [SerializeField] private CanvasGroup pauseScreen;
+    [Space(20)]
+    [Header("SFX Buttons")]
+    [SerializeField] AudioSource SFXButtons;
+    [SerializeField] AudioClip[] hoversAudio;
+
+
 
     private bool isPaused = false;
 
@@ -55,4 +63,13 @@ public class MenuPausa : MonoBehaviour
         pauseScreen.interactable = interactable;
         pauseScreen.blocksRaycasts = interactable;
     }
+
+    ////////////////////FUNCIONALIDAD SONIDO EN LOS BOTONES////////////////////////////////////////
+    public void HoverAudioOn()
+    {
+        int randSound = Random.Range(0, hoversAudio.Length);
+        AudioClip clip = hoversAudio[randSound];
+        SFXButtons.PlayOneShot(clip);
+    }
+    ////////////////////FUNCIONALIDAD SONIDO EN LOS BOTONES////////////////////////////////////////
 }
