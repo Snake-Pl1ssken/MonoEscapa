@@ -46,6 +46,15 @@ namespace GinjaGaming.FinalCharacterController
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ToggleSprint"",
+                    ""type"": ""Button"",
+                    ""id"": ""dea76151-b8a6-45f8-a727-43b2ee920d4a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -169,6 +178,17 @@ namespace GinjaGaming.FinalCharacterController
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d4a35b36-98e3-46c6-9548-8eabc9003e9a"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleSprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -179,6 +199,7 @@ namespace GinjaGaming.FinalCharacterController
             m_PlayeLocomotionMap = asset.FindActionMap("PlayeLocomotionMap", throwIfNotFound: true);
             m_PlayeLocomotionMap_Movement = m_PlayeLocomotionMap.FindAction("Movement", throwIfNotFound: true);
             m_PlayeLocomotionMap_Look = m_PlayeLocomotionMap.FindAction("Look", throwIfNotFound: true);
+            m_PlayeLocomotionMap_ToggleSprint = m_PlayeLocomotionMap.FindAction("ToggleSprint", throwIfNotFound: true);
         }
 
         ~@PlayerControlsTutorial()
@@ -247,12 +268,14 @@ namespace GinjaGaming.FinalCharacterController
         private List<IPlayeLocomotionMapActions> m_PlayeLocomotionMapActionsCallbackInterfaces = new List<IPlayeLocomotionMapActions>();
         private readonly InputAction m_PlayeLocomotionMap_Movement;
         private readonly InputAction m_PlayeLocomotionMap_Look;
+        private readonly InputAction m_PlayeLocomotionMap_ToggleSprint;
         public struct PlayeLocomotionMapActions
         {
             private @PlayerControlsTutorial m_Wrapper;
             public PlayeLocomotionMapActions(@PlayerControlsTutorial wrapper) { m_Wrapper = wrapper; }
             public InputAction @Movement => m_Wrapper.m_PlayeLocomotionMap_Movement;
             public InputAction @Look => m_Wrapper.m_PlayeLocomotionMap_Look;
+            public InputAction @ToggleSprint => m_Wrapper.m_PlayeLocomotionMap_ToggleSprint;
             public InputActionMap Get() { return m_Wrapper.m_PlayeLocomotionMap; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -268,6 +291,9 @@ namespace GinjaGaming.FinalCharacterController
                 @Look.started += instance.OnLook;
                 @Look.performed += instance.OnLook;
                 @Look.canceled += instance.OnLook;
+                @ToggleSprint.started += instance.OnToggleSprint;
+                @ToggleSprint.performed += instance.OnToggleSprint;
+                @ToggleSprint.canceled += instance.OnToggleSprint;
             }
 
             private void UnregisterCallbacks(IPlayeLocomotionMapActions instance)
@@ -278,6 +304,9 @@ namespace GinjaGaming.FinalCharacterController
                 @Look.started -= instance.OnLook;
                 @Look.performed -= instance.OnLook;
                 @Look.canceled -= instance.OnLook;
+                @ToggleSprint.started -= instance.OnToggleSprint;
+                @ToggleSprint.performed -= instance.OnToggleSprint;
+                @ToggleSprint.canceled -= instance.OnToggleSprint;
             }
 
             public void RemoveCallbacks(IPlayeLocomotionMapActions instance)
@@ -299,6 +328,7 @@ namespace GinjaGaming.FinalCharacterController
         {
             void OnMovement(InputAction.CallbackContext context);
             void OnLook(InputAction.CallbackContext context);
+            void OnToggleSprint(InputAction.CallbackContext context);
         }
     }
 }
