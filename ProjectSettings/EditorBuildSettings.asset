@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level1.unity
     guid: 82bec9f5f294ee741b3d2b013249a7ad
+  - enabled: 1
+    path: Assets/Scenes/DayNightCycle.unity
+    guid: a3596ee6218b90f438e13e4c2faf44ef
   m_configObjects: {}
