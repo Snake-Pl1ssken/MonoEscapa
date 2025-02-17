@@ -55,6 +55,15 @@ namespace GinjaGaming.FinalCharacterController
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""b668408c-1f8c-4deb-9839-a89c93cf8008"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -189,6 +198,17 @@ namespace GinjaGaming.FinalCharacterController
                     ""action"": ""ToggleSprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a6850902-eb57-435f-8a4a-e4f1397910c4"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -200,6 +220,7 @@ namespace GinjaGaming.FinalCharacterController
             m_PlayeLocomotionMap_Movement = m_PlayeLocomotionMap.FindAction("Movement", throwIfNotFound: true);
             m_PlayeLocomotionMap_Look = m_PlayeLocomotionMap.FindAction("Look", throwIfNotFound: true);
             m_PlayeLocomotionMap_ToggleSprint = m_PlayeLocomotionMap.FindAction("ToggleSprint", throwIfNotFound: true);
+            m_PlayeLocomotionMap_Jump = m_PlayeLocomotionMap.FindAction("Jump", throwIfNotFound: true);
         }
 
         ~@PlayerControlsTutorial()
@@ -269,6 +290,7 @@ namespace GinjaGaming.FinalCharacterController
         private readonly InputAction m_PlayeLocomotionMap_Movement;
         private readonly InputAction m_PlayeLocomotionMap_Look;
         private readonly InputAction m_PlayeLocomotionMap_ToggleSprint;
+        private readonly InputAction m_PlayeLocomotionMap_Jump;
         public struct PlayeLocomotionMapActions
         {
             private @PlayerControlsTutorial m_Wrapper;
@@ -276,6 +298,7 @@ namespace GinjaGaming.FinalCharacterController
             public InputAction @Movement => m_Wrapper.m_PlayeLocomotionMap_Movement;
             public InputAction @Look => m_Wrapper.m_PlayeLocomotionMap_Look;
             public InputAction @ToggleSprint => m_Wrapper.m_PlayeLocomotionMap_ToggleSprint;
+            public InputAction @Jump => m_Wrapper.m_PlayeLocomotionMap_Jump;
             public InputActionMap Get() { return m_Wrapper.m_PlayeLocomotionMap; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -294,6 +317,9 @@ namespace GinjaGaming.FinalCharacterController
                 @ToggleSprint.started += instance.OnToggleSprint;
                 @ToggleSprint.performed += instance.OnToggleSprint;
                 @ToggleSprint.canceled += instance.OnToggleSprint;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
             }
 
             private void UnregisterCallbacks(IPlayeLocomotionMapActions instance)
@@ -307,6 +333,9 @@ namespace GinjaGaming.FinalCharacterController
                 @ToggleSprint.started -= instance.OnToggleSprint;
                 @ToggleSprint.performed -= instance.OnToggleSprint;
                 @ToggleSprint.canceled -= instance.OnToggleSprint;
+                @Jump.started -= instance.OnJump;
+                @Jump.performed -= instance.OnJump;
+                @Jump.canceled -= instance.OnJump;
             }
 
             public void RemoveCallbacks(IPlayeLocomotionMapActions instance)
@@ -329,6 +358,7 @@ namespace GinjaGaming.FinalCharacterController
             void OnMovement(InputAction.CallbackContext context);
             void OnLook(InputAction.CallbackContext context);
             void OnToggleSprint(InputAction.CallbackContext context);
+            void OnJump(InputAction.CallbackContext context);
         }
     }
 }

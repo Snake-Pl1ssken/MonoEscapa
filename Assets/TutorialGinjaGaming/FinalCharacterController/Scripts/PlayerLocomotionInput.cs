@@ -15,6 +15,8 @@ namespace GinjaGaming.FinalCharacterController
         public Vector2 MovementInput { get; private set; }
         public Vector2 LookInput { get; private set; }
 
+        public bool JumpPressed { get; private set; }
+
         private void OnEnable()
         {
             PlayerControls = new PlayerControlsTutorial();
@@ -51,6 +53,14 @@ namespace GinjaGaming.FinalCharacterController
             {
                 SprintToggledOn = !holdToSprint && SprintToggledOn;
             }
+        }
+
+        public void OnJump(InputAction.CallbackContext context)
+        {
+            if (!context.performed)
+                return;
+
+            JumpPressed = true;
         }
     }
 }
