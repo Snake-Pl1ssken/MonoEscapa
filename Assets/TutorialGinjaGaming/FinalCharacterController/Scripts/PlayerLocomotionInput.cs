@@ -8,15 +8,18 @@ namespace GinjaGaming.FinalCharacterController
     [DefaultExecutionOrder(-2)]
     public class PlayerLocomotionInput : MonoBehaviour, PlayerControlsTutorial.IPlayeLocomotionMapActions
     {
+        #region Class Variables
         [SerializeField] private bool holdToSprint = true;
-
-        public bool SprintToggledOn { get; private set; }
         public PlayerControlsTutorial PlayerControls { get; private set; }
         public Vector2 MovementInput { get; private set; }
         public Vector2 LookInput { get; private set; }
-
         public bool JumpPressed { get; private set; }
 
+        public bool SprintToggledOn { get; private set; }
+        public bool WalkToggledOn { get; private set; }
+        #endregion
+
+        #region Startup
         private void OnEnable()
         {
             PlayerControls = new PlayerControlsTutorial();
@@ -31,7 +34,16 @@ namespace GinjaGaming.FinalCharacterController
             PlayerControls.PlayeLocomotionMap.Disable();
             PlayerControls.PlayeLocomotionMap.RemoveCallbacks(this);
         }
+        #endregion
 
+        #region Late Update Logic
+        private void LateUpdate()
+        {
+            JumpPressed = false;
+        }
+        #endregion
+
+        #region Input CallBacks
         public void OnMovement(InputAction.CallbackContext context)
         {
             MovementInput = context.ReadValue<Vector2>();
@@ -62,5 +74,14 @@ namespace GinjaGaming.FinalCharacterController
 
             JumpPressed = true;
         }
+
+        public void OnToggleWalk(InputAction.CallbackContext context)
+        {
+            if (!context.performed)
+                return;
+
+            WalkToggledOn = !WalkToggledOn;
+        }
+        #endregion
     }
 }
