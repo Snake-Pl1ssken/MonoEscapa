@@ -60,7 +60,7 @@ namespace GinjaGaming.FinalCharacterController
             _animator.SetFloat(inputXHash, _currentBlendInput.x);
             _animator.SetFloat(inputYHash, _currentBlendInput.y);
             _animator.SetFloat(inputMagnitudeHash, _currentBlendInput.magnitude);
-            _animator.SetFloat(rotationmismatchHash, _playerController.RotationMisMatch);
+            _animator.SetFloat(rotationmismatchHash, _playerController.RotationMismatch);
         }
     }
 }

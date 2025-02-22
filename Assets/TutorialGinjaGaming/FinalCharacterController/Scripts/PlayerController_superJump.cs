@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 namespace GinjaGaming.FinalCharacterController
 {
     [DefaultExecutionOrder(-1)]
-    public class PlayerController : MonoBehaviour
+    public class PlayerController_Superjump : MonoBehaviour
     {
         #region Class Variables
         [Header("Components")]
@@ -46,14 +46,10 @@ namespace GinjaGaming.FinalCharacterController
         private Vector2 _cameraRotation = Vector2.zero;
         private Vector2 _playerTargetRotation = Vector2.zero;
 
-        private bool _jumpedLastFrame = false;
         private bool _isRotatingClockwise = false;
         private float _rotatingToTargetTimer = 0f;
         private float _verticalVelocity = 0f;
         private float _antiBump;
-        private float _stepOffset;
-
-        private PlayerMovementState _lastMovementState = PlayerMovementState.Falling;
         #endregion
 
         #region Startup
@@ -63,7 +59,6 @@ namespace GinjaGaming.FinalCharacterController
             _playerState = GetComponent<PlayerState>();
 
             _antiBump = sprintSpeed;
-            _stepOffset = _characterController.stepOffset;
         }
         #endregion
 
@@ -77,8 +72,6 @@ namespace GinjaGaming.FinalCharacterController
 
         private void UpdateMovementState()
         {
-            _lastMovementState = _playerState.CurrentPlayerMovementState;
-
             bool canRun = CanRun();
             bool isMovementInput = _playerLocomotionInput.MovementInput != Vector2.zero;             //order
             bool isMovingLaterally = IsMovingLaterally();                                            //matters
@@ -93,21 +86,13 @@ namespace GinjaGaming.FinalCharacterController
             _playerState.SetPlayerMovementState(lateralState);
 
             // Control Airborn State
-            if ((!isGrounded || _jumpedLastFrame) && _characterController.velocity.y > 0f)
+            if (!isGrounded && _characterController.velocity.y > 0f)
             {
                 _playerState.SetPlayerMovementState(PlayerMovementState.Jumping);
-                _jumpedLastFrame = false;
-                _characterController.stepOffset = 0f;
             }
-            else if ((!isGrounded || _jumpedLastFrame) && _characterController.velocity.y <= 0f)
+            else if (!isGrounded && _characterController.velocity.y <= 0f)
             {
                 _playerState.SetPlayerMovementState(PlayerMovementState.Falling);
-                _jumpedLastFrame = false;
-                _characterController.stepOffset = 0f;
-            }
-            else
-            { 
-                _characterController.stepOffset = _stepOffset;
             }
         }
 
@@ -122,13 +107,7 @@ namespace GinjaGaming.FinalCharacterController
 
             if (_playerLocomotionInput.JumpPressed && isGrounded)
             {
-                _verticalVelocity += Mathf.Sqrt(jumpSpeed * 3 * gravity);
-                _jumpedLastFrame = true;
-            }
-
-            if (_playerState.IsStateGroundedState(_lastMovementState) && !isGrounded)
-            {
-                _verticalVelocity += _antiBump;
+                _verticalVelocity += _antiBump + Mathf.Sqrt(jumpSpeed * 3 * gravity);
             }
         }
 
@@ -160,22 +139,9 @@ namespace GinjaGaming.FinalCharacterController
             newVelocity = (newVelocity.magnitude > drag * Time.deltaTime) ? newVelocity - currentDrag : Vector3.zero;
             newVelocity = Vector3.ClampMagnitude(new Vector3(newVelocity.x, 0f, newVelocity.z), clampLateralMagnitude);
             newVelocity.y += _verticalVelocity;
-            newVelocity = !isGrounded ? HandleSteepWalls(newVelocity) : newVelocity;
 
             // Move character (Unity suggests only calling this once per tick)
             _characterController.Move(newVelocity * Time.deltaTime);
-        }
-
-        private Vector3 HandleSteepWalls(Vector3 velocity)
-        {
-            Vector3 normal = CharacterControllerUtils.GetNormalWithSphereCast(_characterController, _groundLayers);
-            float angle = Vector3.Angle(normal, Vector3.up);
-            bool validAngle = angle <= _characterController.slopeLimit;
-
-            if (!validAngle && _verticalVelocity < 0f)
-                velocity = Vector3.ProjectOnPlane(velocity, normal);
-
-            return velocity;
         }
         #endregion
 
@@ -267,13 +233,7 @@ namespace GinjaGaming.FinalCharacterController
 
         private bool IsGroundedWhileAirborne()
         {
-            Vector3 normal = CharacterControllerUtils.GetNormalWithSphereCast(_characterController, _groundLayers);
-            float angle = Vector3.Angle(normal, Vector3.up);
-            print(angle);
-            bool validAngle = angle <= _characterController.slopeLimit;
-
-
-            return _characterController.isGrounded && validAngle;
+            return _characterController.isGrounded;
         }
 
         private bool CanRun()
