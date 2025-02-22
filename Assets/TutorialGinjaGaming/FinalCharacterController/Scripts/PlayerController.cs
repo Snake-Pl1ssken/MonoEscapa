@@ -22,9 +22,11 @@ namespace GinjaGaming.FinalCharacterController
         public float runSpeed = 4f;
         public float sprintAcceleration = 50f;
         public float sprintSpeed = 7f;
-        public float inAirAcceleration = 0.15f;
+        public float inAirAcceleration = 25f;
         public float drag = 20f;
+        public float inAirDrag = 5f;
         public float gravity = 25f;
+        public float terminalVelocity = 50f;
         public float jumpSpeed = 1.0f;
         public float movingThreshold = 0.01f;
 
@@ -37,7 +39,7 @@ namespace GinjaGaming.FinalCharacterController
         public float lookSenseV = 0.1f;
         public float lookLimitV = 89f;
 
-        [Header("Enviroment Details")]
+        [Header("Environment Details")]
         [SerializeField] private LayerMask _groundLayers;
 
         private PlayerLocomotionInput _playerLocomotionInput;
@@ -106,7 +108,7 @@ namespace GinjaGaming.FinalCharacterController
                 _characterController.stepOffset = 0f;
             }
             else
-            { 
+            {
                 _characterController.stepOffset = _stepOffset;
             }
         }
@@ -130,6 +132,12 @@ namespace GinjaGaming.FinalCharacterController
             {
                 _verticalVelocity += _antiBump;
             }
+
+            // Clamp at terminal velocity
+            if (Mathf.Abs(_verticalVelocity) > Mathf.Abs(terminalVelocity))
+            {
+                _verticalVelocity = -1f * Mathf.Abs(terminalVelocity);
+            }
         }
 
         private void HandleLateralMovement()
@@ -143,7 +151,7 @@ namespace GinjaGaming.FinalCharacterController
             float lateralAcceleration = !isGrounded ? inAirAcceleration :
                                         isWalking ? walkAcceleration :
                                         isSprinting ? sprintAcceleration : runAcceleration;
-            
+
             float clampLateralMagnitude = !isGrounded ? sprintSpeed :
                                           isWalking ? walkSpeed :
                                           isSprinting ? sprintSpeed : runSpeed;
@@ -156,8 +164,9 @@ namespace GinjaGaming.FinalCharacterController
             Vector3 newVelocity = _characterController.velocity + movementDelta;
 
             // Add drag to player
-            Vector3 currentDrag = newVelocity.normalized * drag * Time.deltaTime;
-            newVelocity = (newVelocity.magnitude > drag * Time.deltaTime) ? newVelocity - currentDrag : Vector3.zero;
+            float dragMagnitude = isGrounded ? drag : inAirDrag;
+            Vector3 currentDrag = newVelocity.normalized * dragMagnitude * Time.deltaTime;
+            newVelocity = (newVelocity.magnitude > dragMagnitude * Time.deltaTime) ? newVelocity - currentDrag : Vector3.zero;
             newVelocity = Vector3.ClampMagnitude(new Vector3(newVelocity.x, 0f, newVelocity.z), clampLateralMagnitude);
             newVelocity.y += _verticalVelocity;
             newVelocity = !isGrounded ? HandleSteepWalls(newVelocity) : newVelocity;
@@ -244,7 +253,7 @@ namespace GinjaGaming.FinalCharacterController
         #region State Checks
         private bool IsMovingLaterally()
         {
-            Vector3 lateralVelocity = new Vector3(_characterController.velocity.x, 0f, _characterController.velocity.y);
+            Vector3 lateralVelocity = new Vector3(_characterController.velocity.x, 0f, _characterController.velocity.z);
 
             return lateralVelocity.magnitude > movingThreshold;
         }
@@ -269,9 +278,7 @@ namespace GinjaGaming.FinalCharacterController
         {
             Vector3 normal = CharacterControllerUtils.GetNormalWithSphereCast(_characterController, _groundLayers);
             float angle = Vector3.Angle(normal, Vector3.up);
-            print(angle);
             bool validAngle = angle <= _characterController.slopeLimit;
-
 
             return _characterController.isGrounded && validAngle;
         }
