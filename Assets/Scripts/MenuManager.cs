@@ -69,6 +69,11 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("DayNightCycle");
     }
 
+    public void EnemyTestDemo()
+    {
+        SceneManager.LoadScene("copylvl1");
+    }
+
     public void ExitGame()
     {
         Application.Quit();

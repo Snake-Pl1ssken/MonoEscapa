@@ -2,15 +2,34 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ConsciousnessBar : MonoBehaviour
 {
+    public static ConsciousnessBar instance
+    {
+        get; private set;
+    }
+
     public Slider ConsciousnessSlider;
     public Slider easeConsciousnessSlider;
     public float maxHealth = 100f;
     public float health;
     private float lerpSpeed = 0.03f;
+
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
 
     // Start is called before the first frame update
     void Start()
@@ -35,9 +54,14 @@ public class ConsciousnessBar : MonoBehaviour
         {
             easeConsciousnessSlider.value = Mathf.Lerp(easeConsciousnessSlider.value, health, lerpSpeed);
         }
+
+        if (health <= 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
-    void takeDamage(float v)
+    public void takeDamage(float v)
     {
         health -= v;
     }
