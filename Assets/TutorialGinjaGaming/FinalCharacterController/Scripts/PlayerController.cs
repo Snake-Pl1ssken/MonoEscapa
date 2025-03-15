@@ -54,6 +54,7 @@ namespace GinjaGaming.FinalCharacterController
         private float _verticalVelocity = 0f;
         private float _antiBump;
         private float _stepOffset;
+        [SerializeField] GameObject testTeleport;
 
         private PlayerMovementState _lastMovementState = PlayerMovementState.Falling;
         #endregion
@@ -175,6 +176,13 @@ namespace GinjaGaming.FinalCharacterController
             _characterController.Move(newVelocity * Time.deltaTime);
         }
 
+        public void TeleporterCharacter(Vector3 newPos)
+        {
+            _characterController.enabled = false;
+            testTeleport.transform.position = newPos;
+            _characterController.enabled = true;
+        }
+
         private Vector3 HandleSteepWalls(Vector3 velocity)
         {
             Vector3 normal = CharacterControllerUtils.GetNormalWithSphereCast(_characterController, _groundLayers);
@@ -196,8 +204,8 @@ namespace GinjaGaming.FinalCharacterController
 
         private void UpdateCameraRotation()
         {
-            _cameraRotation.x += lookSenseH * _playerLocomotionInput.LookInput.x;
-            _cameraRotation.y = Mathf.Clamp(_cameraRotation.y - lookSenseV * _playerLocomotionInput.LookInput.y, -lookLimitV, lookLimitV);
+            _cameraRotation.x += (lookSenseH * _playerLocomotionInput.LookInput.x) * Time.timeScale;
+            _cameraRotation.y = (Mathf.Clamp(_cameraRotation.y - lookSenseV * _playerLocomotionInput.LookInput.y, -lookLimitV, lookLimitV)) * Time.timeScale;
 
             _playerTargetRotation.x += transform.eulerAngles.x + lookSenseH * _playerLocomotionInput.LookInput.x;
 

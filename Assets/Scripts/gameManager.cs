@@ -1,3 +1,4 @@
+using GinjaGaming.FinalCharacterController;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -16,6 +17,8 @@ public class MenuPausa : MonoBehaviour
     [SerializeField] AudioSource SFXButtons;
     [SerializeField] AudioClip[] hoversAudio;
 
+    [SerializeField] PlayerController controller;
+    [SerializeField] GameObject player;
 
 
     private bool isPaused = false;
@@ -55,6 +58,23 @@ public class MenuPausa : MonoBehaviour
         isPaused = false;
         Time.timeScale = 1f;
         SetPauseScreen(0f, false);
+    }
+
+    public void SavePlayer()
+    {
+        SaveSystem.SavePlayer(controller);
+    }
+    
+    public void LoadPlayer()
+    {
+        PlayerData data = SaveSystem.LoadPlayer();
+
+        Vector3 position;
+        position.x = data.position[0];
+        position.y = data.position[1];
+        position.z = data.position[2];
+
+        controller.TeleporterCharacter(position);
     }
 
     private void SetPauseScreen(float alpha, bool interactable)

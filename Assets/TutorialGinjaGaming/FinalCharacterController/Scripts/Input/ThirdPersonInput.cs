@@ -75,7 +75,7 @@ namespace GinjaGaming.FinalCharacterController
                 return;
 
             Vector2 scrollInput = context.ReadValue<Vector2>();
-            ScrollInput = -1f * scrollInput.normalized * _cameraZoomSpeed;
+            ScrollInput = (-1f * scrollInput.normalized * _cameraZoomSpeed) * Time.timeScale;
         }
 
         #endregion
