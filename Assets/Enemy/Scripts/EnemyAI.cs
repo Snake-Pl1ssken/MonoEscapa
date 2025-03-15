@@ -16,7 +16,6 @@ public class EnemyAI : MonoBehaviour
     //Patrol
     public Vector3 walkPoint;
     bool walkPointSet;
-    bool viendoPlayer = false;
     public float walkPointRange;
     //Chase
     public float sightRange, attackRange;
@@ -35,15 +34,14 @@ public class EnemyAI : MonoBehaviour
 
     private void Patroling()
     {
-        viendoPlayer = false;
-        if (viendoPlayer == false)
-        {
             agent.SetDestination(patrolpuntos[targetPoint].transform.position);
-            if (transform.position.x == patrolpuntos[targetPoint].transform.position.x && transform.position.z == patrolpuntos[targetPoint].transform.position.z)
+            for (int i = 0; i < patrolpuntos.Length; i++)
             {
-                SearchWalkPoint();
+                patrolpuntos[i].gameObject.SetActive(true);
             }
-        }
+            SearchWalkPoint();
+            
+
     }
     private void SearchWalkPoint()
     {
@@ -70,14 +68,19 @@ public class EnemyAI : MonoBehaviour
     }
     private void Chaseplayer()
     {
-        viendoPlayer = true;
-        agent.SetDestination(player.position);
-        
+        //agent.SetDestination(player.position);
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            agent.SetDestination(player.position);
+        }
+
+        // Asegúrate de que el enemigo siempre se mueva
+        agent.isStopped = false;
     }
     private void Attackplayer()
     {
-        viendoPlayer = true;
-        agent.SetDestination(transform.position);
+        //agent.SetDestination(transform.position);
+        agent.ResetPath();
         transform.LookAt(player);
         if (!alreadyAttacked) 
         {
